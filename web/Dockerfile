@@ -4,7 +4,7 @@ FROM ${JITSI_REPO}/base
 ADD https://dl.eff.org/certbot-auto /usr/local/bin/
 
 COPY rootfs/ /
-COPY jitsi-meet-web_1.0.1-1_all.deb /usr/share/jitsi-meet/
+COPY jitsi-meet-web_anno.deb /usr/share/jitsi-meet/
 
 RUN \
 	apt-dpkg-wrap apt-get update && \
