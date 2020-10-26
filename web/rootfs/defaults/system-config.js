@@ -9,6 +9,8 @@
 {{ $XMPP_DOMAIN := .Env.XMPP_DOMAIN -}}
 {{ $XMPP_MUC_DOMAIN := .Env.XMPP_MUC_DOMAIN -}}
 {{ $XMPP_MUC_DOMAIN_PREFIX := (split "." .Env.XMPP_MUC_DOMAIN)._0  -}}
+{{ $PUBLIC_URL := .Env.PUBLIC_URL -}}
+{{ $ENABLE_XMPP_WEBSOCKET  := .Env.ENABLE_XMPP_WEBSOCKET | default "false" | toBool -}}
 
 // Begin default config overrides.
 
@@ -36,6 +38,13 @@ config.hosts.anonymousdomain = '{{ .Env.XMPP_GUEST_DOMAIN }}';
 config.hosts.authdomain = '{{ $XMPP_DOMAIN }}';
 {{ end -}}
 
+{{ if $ENABLE_XMPP_WEBSOCKET -}}
+if ($PUBLIC_URL) {
+    config.websocket = '${{ PUBLIC_URL }}/http/ws}/xmpp-websocket'
+}
+{{ end -}}
+
+
 config.bosh = '{{ if $CONFIG_BOSH_HOST }}https://{{ $CONFIG_BOSH_HOST }}{{ end }}/http-bind';
 {{ if $ENABLE_WEBSOCKETS -}}
 config.websocket = 'wss://{{ if $CONFIG_BOSH_HOST }}{{ $CONFIG_BOSH_HOST }}{{end}}/xmpp-websocket';
@@ -48,3 +57,4 @@ config.externalConnectUrl = '//{{ if .Env.CONFIG_BOSH_HOST }}{{ .Env.CONFIG_BOSH
 config.externalConnectUrl = '//{{ if .Env.CONFIG_BOSH_HOST }}{{ .Env.CONFIG_BOSH_HOST }}{{ end }}/http-pre-bind';
 {{ end -}}
 {{ end -}}
+

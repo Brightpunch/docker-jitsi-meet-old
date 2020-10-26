@@ -73,17 +73,6 @@ if [[ -f /config/custom-config.js ]]; then
     cat /config/custom-config.js >> /config/config.js
 fi
 
-if [[ $ENABLE_XMPP_WEBSOCKET -eq 1 ]]; then
-    if [[ -z "$PUBLIC_URL" ]]; then
-        echo 'FATAL ERROR: If ENABLE_XMPP_WEBSOCKET is set to 1, PUBLIC_URL must be defined!'
-        exit 1
-    fi
-
-    sed -i \
-        -e "s#// websocket:.*#websocket: '${PUBLIC_URL/http/ws}/xmpp-websocket',#" \
-    /config/config.js
-fi
-
 if [[ ! -f /config/interface_config.js ]]; then
     cp /defaults/interface_config.js /config/interface_config.js
 
