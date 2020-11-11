@@ -1,7 +1,13 @@
 #!/usr/bin/with-contenv bash
 
 if [[ ! -f /etc/saslauthd.conf ]]; then
+  if [[ -f /annolens/templates/saslauthd.conf ]]; then
+      cp /annolens/templates/saslauthd.conf /defaults/saslauthd.conf
+  fi
   tpl /defaults/saslauthd.conf > /etc/saslauthd.conf
+  if [[ -f /annolens/saslauthd.conf ]]; then
+      cp /annolens/saslauthd.conf /etc/saslauthd.conf
+  fi
   mkdir -pm777 /var/run/saslauthd
   adduser prosody sasl
   echo >> /etc/ldap/ldap.conf "TLS_REQCERT allow"
@@ -27,8 +33,25 @@ fi
 
 if [[ ! -f $PROSODY_CFG ]]; then
     cp -r /defaults/* /config
+    
+    if [[ -f /annolens/templates/prosody.cfg.lua ]]; then
+        cp /annolens/templates/prosody.cfg.lua /defaults/prosody.cfg.lua
+    fi
+    
+    if [[ -f /annolens/templates/jitsi-meet.cfg.lua ]]; then
+        cp /annolens/templates/jitsi-meet.cfg.lua /defaults/conf.d/jitsi-meet.cfg.lua
+    fi
+
     tpl /defaults/prosody.cfg.lua > $PROSODY_CFG
     tpl /defaults/conf.d/jitsi-meet.cfg.lua > /config/conf.d/jitsi-meet.cfg.lua
+
+    if [[ -f /annolens/prosody.cfg.lua ]]; then
+        cp /annolens/prosody.cfg.lua $PROSODY_CFG
+    fi
+    
+    if [[ -f /annolens/jitsi-meet.cfg.lua ]]; then
+        cp /annolens/jitsi-meet.cfg.lua /config/conf.d/jitsi-meet.cfg.lua
+    fi
 
     if [[ -z $JICOFO_COMPONENT_SECRET || -z $JICOFO_AUTH_PASSWORD ]]; then
         echo 'FATAL ERROR: Jicofo component secret and auth password must be set'
