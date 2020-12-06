@@ -44,6 +44,14 @@ RUN \
         && apt-dpkg-wrap apt-get install -y jitsi-upload-integrations jq \
         && apt-cleanup
 
+RUN \ 
+	export GCSFUSE_REPO=gcsfuse-focal \
+	&& echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" | tee /etc/apt/sources.list.d/gcsfuse.list \
+	&& curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
+	&& apt-dpkg-wrap apt-get update \
+	&& apt-dpkg-wrap apt-get install -y gcsfuse \
+	&& apt-cleanup
+
 COPY rootfs/ /
 
 VOLUME /config

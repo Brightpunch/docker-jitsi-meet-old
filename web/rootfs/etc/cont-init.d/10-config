@@ -89,6 +89,6 @@ if [[ -f /annolens/custom-config.js ]]; then
     cat /annolens/custom-config.js >> /config/config.js
 fi
 
-if [[ -f /annolens/interface-config.js ]]; then
+if [[ -f /annolens/interface_config.js ]]; then
     cp /annolens/interface_config.js /config/interface_config.js
 fi
