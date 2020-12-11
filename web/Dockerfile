@@ -1,14 +1,13 @@
 ARG JITSI_REPO=jitsi
 FROM ${JITSI_REPO}/base
 
-ADD https://dl.eff.org/certbot-auto /usr/local/bin/
-
+ADD https://raw.githubusercontent.com/acmesh-official/acme.sh/2.8.8/acme.sh /opt
 COPY rootfs/ /
 COPY jitsi-meet-web_1.0.1-1_all.deb /usr/share/jitsi-meet/
 
 RUN \
 	apt-dpkg-wrap apt-get update && \
-	apt-dpkg-wrap apt-get install -y cron nginx-extras && \
+	apt-dpkg-wrap apt-get install -y cron nginx-extras socat && \
 	apt-dpkg-wrap apt-get install -y /usr/share/jitsi-meet/jitsi-meet-web_1.0.1-1_all.deb && \
 	apt-dpkg-wrap apt-get -d install -y jitsi-meet-web-config && \
     dpkg -x /var/cache/apt/archives/jitsi-meet-web-config*.deb /tmp/pkg && \
@@ -19,10 +18,6 @@ RUN \
 	rm -f /etc/nginx/conf.d/default.conf && \
 	rm -rf /tmp/pkg /var/cache/apt
 
-RUN \
-	chmod a+x /usr/local/bin/certbot-auto && \
-	certbot-auto --noninteractive --install-only
-
 EXPOSE 80 443
 
-VOLUME ["/config", "/etc/letsencrypt", "/usr/share/jitsi-meet/transcripts"]
+VOLUME ["/config", "/usr/share/jitsi-meet/transcripts"]

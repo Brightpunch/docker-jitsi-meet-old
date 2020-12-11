@@ -3,14 +3,13 @@ version: '3'
 services:
     # Frontend
     web:
-        image: jitsi/web:latest
+        image: jitsi/web:stable-5142-3
         restart: ${RESTART_POLICY}
         ports:
             - '${HTTP_PORT}:80'
             - '${HTTPS_PORT}:443'
         volumes:
             - ${CONFIG}/web:/config:Z
-            - ${CONFIG}/web/letsencrypt:/etc/letsencrypt:Z
             - ${CONFIG}/transcripts:/usr/share/jitsi-meet/transcripts:Z
         environment:
             - ENABLE_LETSENCRYPT
@@ -19,6 +18,7 @@ services:
             - DISABLE_HTTPS
             - LETSENCRYPT_DOMAIN
             - LETSENCRYPT_EMAIL
+            - LETSENCRYPT_USE_STAGING
             - PUBLIC_URL
             - TZ
             - AMPLITUDE_ID
@@ -71,6 +71,8 @@ services:
             - MATOMO_SITE_ID
             - MICROSOFT_API_APP_CLIENT_ID
             - NGINX_RESOLVER
+            - NGINX_WORKER_PROCESSES
+            - NGINX_WORKER_CONNECTIONS
             - PEOPLE_SEARCH_URL
             - RESOLUTION
             - RESOLUTION_MIN
@@ -88,6 +90,7 @@ services:
             - XMPP_GUEST_DOMAIN
             - XMPP_MUC_DOMAIN
             - XMPP_RECORDER_DOMAIN
+            - TOKEN_AUTH_URL
         networks:
             meet.jitsi:
                 aliases:
@@ -95,7 +98,7 @@ services:
 
     # XMPP server
     prosody:
-        image: jitsi/prosody:latest
+        image: jitsi/prosody:stable-5142-3
         restart: ${RESTART_POLICY}
         expose:
             - '5222'
@@ -134,6 +137,7 @@ services:
             - XMPP_MUC_MODULES
             - XMPP_INTERNAL_MUC_MODULES
             - XMPP_RECORDER_DOMAIN
+            - XMPP_CROSS_DOMAIN
             - JICOFO_COMPONENT_SECRET
             - JICOFO_AUTH_USER
             - JICOFO_AUTH_PASSWORD
@@ -163,7 +167,7 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:latest
+        image: jitsi/jicofo:stable-5142-3
         restart: ${RESTART_POLICY}
         volumes:
             - ${CONFIG}/jicofo:/config:Z
@@ -192,7 +196,7 @@ services:
 
     # Video bridge
     jvb:
-        image: jitsi/jvb:latest
+        image: jitsi/jvb:stable-5142-3
         restart: ${RESTART_POLICY}
         ports:
             - '${JVB_PORT}:${JVB_PORT}/udp'
