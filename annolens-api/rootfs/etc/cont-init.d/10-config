@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+# teemplate config files
+tpl /defaults/config-production.conf > /config/config-production.conf
+tpl /defaults/config-development.conf > /config/config-development.conf

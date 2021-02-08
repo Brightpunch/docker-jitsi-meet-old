@@ -1,0 +1,25 @@
+{
+  "url": "{{ .Env.PORTAL_URL }}",
+  "superAdmin": {
+    "emails": {{ .Env.SUPER_ADMINS }},
+  },
+  "fusionauth": {
+    "host": "https://{{ .Env.FUSIONAUTH_SERVER }}",
+    "clientID": "{{ .Env.FUSIONAUTH_CLIENTID }}",
+    "clientSecret": "{{ .Env.FUSIONAUTH_CLIENTSECRET }}",
+    "clientHost": "https://{{ .Env.FUSIONAUTH_SERVER }}/portal",
+    "redirectURI": "{{ .Env.PORTAL_URL }}/oauth-callback",
+    "applicationID": "{{ .Env.FUSIONAUTH_CLIENTID }}",
+    "apiKey": "{{ .Env.FUSIONAUTH_APIKEY }}",
+    "signingKeySecret": "{{ .Env.FUSIONAUTH_SIGNINGKEY }}"
+  },
+  "mongoDb": {
+    "url": "mongodb://annolens:{{ .Env.MONGO_AUTHPASSWORD }}@{{ .Env.MONGODB_SERVER }}:{{ .Env.MONGODB_PORT }}/annolens"
+  },
+  "jwt": {
+    "privateKey": "{{ .Env.JWT_PRIVATEKEY }}",
+    "issuer": "{{ .Env.JWT_ISSUER }}",
+    "subject": "{{ .Env.JWT_SUBJECT }}",
+    "ttlSeconds": {{ .Env.JWT_TTL }}
+  }
+}
