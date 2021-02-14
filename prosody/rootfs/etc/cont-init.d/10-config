@@ -52,11 +52,12 @@ if [[ ! -f $PROSODY_CFG ]]; then
     if [[ -f /annolens/jitsi-meet.cfg.lua ]]; then
         cp /annolens/jitsi-meet.cfg.lua /config/conf.d/jitsi-meet.cfg.lua
     fi
+fi
 
-    if [[ -z $JICOFO_COMPONENT_SECRET || -z $JICOFO_AUTH_PASSWORD ]]; then
-        echo 'FATAL ERROR: Jicofo component secret and auth password must be set'
-        exit 1
-    fi
+if [[ -z $JICOFO_COMPONENT_SECRET || -z $JICOFO_AUTH_PASSWORD ]]; then
+    echo 'FATAL ERROR: Jicofo component secret and auth password must be set'
+    exit 1
+fi
 
 if [[ -z $JICOFO_COMPONENT_SECRET || -z $JICOFO_AUTH_PASSWORD ]]; then
     echo 'FATAL ERROR: Jicofo component secret and auth password must be set'
