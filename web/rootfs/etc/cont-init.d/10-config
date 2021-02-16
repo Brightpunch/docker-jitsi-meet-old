@@ -74,6 +74,8 @@ fi
 
 tpl /defaults/ssl.conf > /config/nginx/ssl.conf
 
+tpl /defaults/close3.html > /config/close3.html
+
 tpl /defaults/default > /config/nginx/site-confs/default
 
 cp /defaults/config.js /config/config.js
