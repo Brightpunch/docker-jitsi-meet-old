@@ -58,3 +58,8 @@ chown -R jibri ${JIBRI_RECORDING_DIR}
 [ -z "${JIBRI_LOGS_DIR}" ] && export JIBRI_LOGS_DIR=/config/logs
 mkdir -p ${JIBRI_LOGS_DIR}
 chown -R jibri ${JIBRI_LOGS_DIR}
+
+# make gcsfuse dir
+[ -z "${GCSFUSE_RECORDING_DIR}" ] && export GCSFUSE_RECORDING_DIR=/gcs/recordings
+mkdir -p ${GCSFUSE_RECORDING_DIR}
+chown -R jibri ${GCSFUSE_RECORDING_DIR}

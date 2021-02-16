@@ -8,9 +8,13 @@ ARG CHROMEDRIVER_MAJOR_RELEASE=78
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+COPY packages/ /
+
+# apt-dpkg-wrap apt-get install -y jibri libgl1-mesa-dri \
+
 RUN \
 	apt-dpkg-wrap apt-get update \
-	&& apt-dpkg-wrap apt-get install -y jibri libgl1-mesa-dri \
+	&& apt-dpkg-wrap apt-get install -y /usr/share/jibri_0.2.0-1_all.deb libgl1-mesa-dri \
 	&& apt-cleanup
 
 RUN \
@@ -23,10 +27,10 @@ RUN \
 	|| true
 
 RUN \
-        [ "${CHROME_RELEASE}" != "latest" ] \
-        && curl -4so "/tmp/google-chrome-stable_${CHROME_RELEASE}-1_amd64.deb" "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_RELEASE}-1_amd64.deb" \
+	[ "${CHROME_RELEASE}" != "latest" ] \
+	&& curl -4so "/tmp/google-chrome-stable_${CHROME_RELEASE}-1_amd64.deb" "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_RELEASE}-1_amd64.deb" \
 	&& apt-dpkg-wrap apt-get update \
-        && apt-dpkg-wrap apt-get install -y "/tmp/google-chrome-stable_${CHROME_RELEASE}-1_amd64.deb" \
+	&& apt-dpkg-wrap apt-get install -y "/tmp/google-chrome-stable_${CHROME_RELEASE}-1_amd64.deb" \
 	&& apt-cleanup \
 	|| true
 
@@ -40,9 +44,9 @@ RUN \
 	&& chromedriver --version
 
 RUN \
-        apt-dpkg-wrap apt-get update \
-        && apt-dpkg-wrap apt-get install -y jitsi-upload-integrations jq \
-        && apt-cleanup
+	apt-dpkg-wrap apt-get update \
+	&& apt-dpkg-wrap apt-get install -y jitsi-upload-integrations jq \
+	&& apt-cleanup
 
 RUN \ 
 	export GCSFUSE_REPO=gcsfuse-focal \
