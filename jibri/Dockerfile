@@ -14,7 +14,7 @@ COPY packages/ /
 
 RUN \
 	apt-dpkg-wrap apt-get update \
-	&& apt-dpkg-wrap apt-get install -y /usr/share/jibri_0.2.0-1_all.deb libgl1-mesa-dri \
+	&& apt-dpkg-wrap apt-get install -y /usr/share/jibri_0.2.0-1_all.deb libgl1-mesa-dri dbus-x11 pulseaudio rtkit \
 	&& apt-cleanup
 
 RUN \
@@ -55,6 +55,8 @@ RUN \
 	&& apt-dpkg-wrap apt-get update \
 	&& apt-dpkg-wrap apt-get install -y gcsfuse \
 	&& apt-cleanup
+
+RUN adduser jibri rtkit
 
 COPY rootfs/ /
 
