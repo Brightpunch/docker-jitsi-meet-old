@@ -8,8 +8,11 @@ COPY rootfs/ /
 # COPY jitsi-meet-web_1.0.1-1_all.deb /usr/share/jitsi-meet/ 
 
 RUN \
+	ls -al /usr/share/jitsi-meet-web_1.0.1-1_all.deb
+
+RUN \
 	apt-dpkg-wrap apt-get update && \
-	apt-dpkg-wrap apt-get install -y cron nginx-extras socat && \
+	apt-dpkg-wrap apt-get install -y cron nginx-extras socat && \ 
 	apt-dpkg-wrap apt-get install -y /usr/share/jitsi-meet-web_1.0.1-1_all.deb && \
 	apt-dpkg-wrap apt-get -d install -y jitsi-meet-web-config && \
     dpkg -x /var/cache/apt/archives/jitsi-meet-web-config*.deb /tmp/pkg && \
