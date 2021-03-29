@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+
+# we have to set it, otherwise chrome won't find ~/.asoundrc file
+HOME=/home/jibri
+
+DAEMON=/usr/bin/start-pulseaudio-x11
+exec s6-setuidgid jibri /bin/bash -c "exec $DAEMON"
+
