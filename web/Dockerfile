@@ -23,6 +23,14 @@ RUN \
 	rm -f /etc/nginx/conf.d/default.conf && \
 	rm -rf /tmp/pkg /var/cache/apt
 
+RUN \ 
+	export GCSFUSE_REPO=gcsfuse-focal \
+	&& echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" | tee /etc/apt/sources.list.d/gcsfuse.list \
+	&& curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
+	&& apt-dpkg-wrap apt-get update \
+	&& apt-dpkg-wrap apt-get install -y gcsfuse \
+	&& apt-cleanup
+
 EXPOSE 80 443
 
 VOLUME ["/config", "/usr/share/jitsi-meet/transcripts"]
