@@ -1,5 +1,4 @@
 {{ $DEPLOYMENTINFO_USERREGION := .Env.DEPLOYMENTINFO_USERREGION | default "" -}}
-{{ $BRIDGE_CHANNEL := .Env.BRIDGE_CHANNEL | default "websocket" -}}
 {{ $ENABLE_AUDIO_PROCESSING := .Env.ENABLE_AUDIO_PROCESSING | default "true" | toBool -}}
 {{ $ENABLE_CALENDAR := .Env.ENABLE_CALENDAR | default "false" | toBool -}}
 {{ $ENABLE_FILE_RECORDING_SERVICE := .Env.ENABLE_FILE_RECORDING_SERVICE | default "false" | toBool -}}
@@ -9,6 +8,8 @@
 {{ $ENABLE_NO_AUDIO_DETECTION := .Env.ENABLE_NO_AUDIO_DETECTION | default "false" | toBool -}}
 {{ $ENABLE_P2P := .Env.ENABLE_P2P | default "true" | toBool -}}
 {{ $ENABLE_PREJOIN_PAGE := .Env.ENABLE_PREJOIN_PAGE | default "false" | toBool -}}
+{{ $ENABLE_WELCOME_PAGE := .Env.ENABLE_WELCOME_PAGE | default "true" | toBool -}}
+{{ $ENABLE_CLOSE_PAGE := .Env.ENABLE_CLOSE_PAGE | default "false" | toBool -}}
 {{ $ENABLE_RECORDING := .Env.ENABLE_RECORDING | default "false" | toBool -}}
 {{ $ENABLE_REMB := .Env.ENABLE_REMB | default "true" | toBool -}}
 {{ $ENABLE_REQUIRE_DISPLAY_NAME := .Env.ENABLE_REQUIRE_DISPLAY_NAME | default "false" | toBool -}}
@@ -24,7 +25,11 @@
 {{ $RESOLUTION_WIDTH_MIN := .Env.RESOLUTION_WIDTH_MIN | default "320" -}}
 {{ $START_AUDIO_ONLY := .Env.START_AUDIO_ONLY | default "false" | toBool -}}
 {{ $START_AUDIO_MUTED := .Env.START_AUDIO_MUTED | default 10 -}}
+{{ $DISABLE_AUDIO_LEVELS := .Env.DISABLE_AUDIO_LEVELS | default "false" | toBool -}}
+{{ $ENABLE_NOISY_MIC_DETECTION := .Env.ENABLE_NOISY_MIC_DETECTION | default "true" | toBool -}}
 {{ $START_VIDEO_MUTED := .Env.START_VIDEO_MUTED | default 10 -}}
+{{ $DESKTOP_SHARING_FRAMERATE_MIN := .Env.DESKTOP_SHARING_FRAMERATE_MIN | default 5 -}}
+{{ $DESKTOP_SHARING_FRAMERATE_MAX := .Env.DESKTOP_SHARING_FRAMERATE_MAX | default 5 -}}
 {{ $TESTING_OCTO_PROBABILITY := .Env.TESTING_OCTO_PROBABILITY | default "0" -}}
 {{ $TESTING_CAP_SCREENSHARE_BITRATE := .Env.TESTING_CAP_SCREENSHARE_BITRATE | default "1" -}}
 {{ $XMPP_DOMAIN := .Env.XMPP_DOMAIN -}}
@@ -46,7 +51,10 @@ config.startVideoMuted = {{ $START_VIDEO_MUTED }};
 {{ if .Env.START_BITRATE -}}
 config.startBitrate = '{{ .Env.START_BITRATE }}';
 {{ end -}}
-
+ 
+// ScreenShare Configuration.
+//
+config.desktopSharingFrameRate = { min: {{ $DESKTOP_SHARING_FRAMERATE_MIN }}, max: {{ $DESKTOP_SHARING_FRAMERATE_MAX }} };
 
 // Audio configuration.
 //
@@ -57,6 +65,8 @@ config.disableAP = {{ not $ENABLE_AUDIO_PROCESSING }};
 config.stereo = {{ $ENABLE_STEREO }};
 config.startAudioOnly = {{ $START_AUDIO_ONLY }};
 config.startAudioMuted = {{ $START_AUDIO_MUTED }};
+config.disableAudioLevels = {{ $DISABLE_AUDIO_LEVELS }};
+config.enableNoisyMicDetection = {{ $ENABLE_NOISY_MIC_DETECTION }};
 
 
 // Peer-to-Peer options.
@@ -224,6 +234,12 @@ config.peopleSearchQueryTypes = ['user','conferenceRooms'];
 // Prejoin page.
 config.prejoinPageEnabled = {{ $ENABLE_PREJOIN_PAGE }};
 
+// Welcome page.
+config.enableWelcomePage = {{ $ENABLE_WELCOME_PAGE }};
+
+// Close page.
+config.enableClosePage = {{ $ENABLE_CLOSE_PAGE }};
+
 // Require users to always specify a display name.
 config.requireDisplayName = {{ $ENABLE_REQUIRE_DISPLAY_NAME }};
 
@@ -242,17 +258,15 @@ config.enableLipSync = {{ $ENABLE_LIPSYNC }};
 config.enableRemb = {{ $ENABLE_REMB }};
 config.enableTcc = {{ $ENABLE_TCC }};
 
-config.openBridgeChannel = '{{ $BRIDGE_CHANNEL }}';
-
 // Enable IPv6 support.
 config.useIPv6 = {{ $ENABLE_IPV6 }};
 
 // Transcriptions (subtitles and buttons can be configured in interface_config)
 config.transcribingEnabled = {{ $ENABLE_TRANSCRIPTIONS }};
 
-{{ if .Env.BRANDING_DATA_URL -}}
+{{ if .Env.DYNAMIC_BRANDING_URL -}}
 // External API url used to receive branding specific information.
-config.brandingDataUrl = '{{ .Env.BRANDING_DATA_URL }}';
+config.dynamicBrandingUrl = '{{ .Env.DYNAMIC_BRANDING_URL }}';
 {{ end -}}
 
 {{ if .Env.TOKEN_AUTH_URL -}}

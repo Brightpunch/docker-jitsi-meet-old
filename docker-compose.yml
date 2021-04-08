@@ -3,7 +3,7 @@ version: '3'
 services:
     # Frontend
     web:
-        image: jitsi/web:stable-5142-3
+        image: jitsi/web:latest
         restart: ${RESTART_POLICY}
         ports:
             - '${HTTP_PORT}:80'
@@ -12,8 +12,10 @@ services:
             - ${CONFIG}/web:/config:Z
             - ${CONFIG}/transcripts:/usr/share/jitsi-meet/transcripts:Z
         environment:
+            - ENABLE_COLIBRI_WEBSOCKET
             - ENABLE_LETSENCRYPT
             - ENABLE_HTTP_REDIRECT
+            - ENABLE_HSTS
             - ENABLE_XMPP_WEBSOCKET
             - DISABLE_HTTPS
             - LETSENCRYPT_DOMAIN
@@ -24,8 +26,6 @@ services:
             - AMPLITUDE_ID
             - ANALYTICS_SCRIPT_URLS
             - ANALYTICS_WHITELISTED_EVENTS
-            - BRIDGE_CHANNEL
-            - BRANDING_DATA_URL
             - CALLSTATS_CUSTOM_SCRIPT_URL
             - CALLSTATS_ID
             - CALLSTATS_SECRET
@@ -40,6 +40,7 @@ services:
             - DIALOUT_CODES_URL
             - DROPBOX_APPKEY
             - DROPBOX_REDIRECT_URI
+            - DYNAMIC_BRANDING_URL
             - ENABLE_AUDIO_PROCESSING
             - ENABLE_AUTH
             - ENABLE_CALENDAR
@@ -51,6 +52,8 @@ services:
             - ENABLE_NO_AUDIO_DETECTION
             - ENABLE_P2P
             - ENABLE_PREJOIN_PAGE
+            - ENABLE_WELCOME_PAGE
+            - ENABLE_CLOSE_PAGE
             - ENABLE_RECORDING
             - ENABLE_REMB
             - ENABLE_REQUIRE_DISPLAY_NAME
@@ -80,7 +83,11 @@ services:
             - RESOLUTION_WIDTH_MIN
             - START_AUDIO_ONLY
             - START_AUDIO_MUTED
+            - DISABLE_AUDIO_LEVELS
+            - ENABLE_NOISY_MIC_DETECTION
             - START_BITRATE
+            - DESKTOP_SHARING_FRAMERATE_MIN
+            - DESKTOP_SHARING_FRAMERATE_MAX
             - START_VIDEO_MUTED
             - TESTING_CAP_SCREENSHARE_BITRATE
             - TESTING_OCTO_PROBABILITY
@@ -98,7 +105,7 @@ services:
 
     # XMPP server
     prosody:
-        image: jitsi/prosody:stable-5142-3
+        image: jitsi/prosody:latest
         restart: ${RESTART_POLICY}
         expose:
             - '5222'
@@ -167,28 +174,44 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:stable-5142-3
+        image: jitsi/jicofo:latest
         restart: ${RESTART_POLICY}
         volumes:
             - ${CONFIG}/jicofo:/config:Z
         environment:
             - AUTH_TYPE
+            - BRIDGE_AVG_PARTICIPANT_STRESS
+            - BRIDGE_STRESS_THRESHOLD
             - ENABLE_AUTH
+            - ENABLE_AUTO_OWNER
+            - ENABLE_CODEC_VP8
+            - ENABLE_CODEC_VP9
+            - ENABLE_CODEC_H264
+            - ENABLE_RECORDING
+            - ENABLE_SCTP
+            - JICOFO_AUTH_USER
+            - JICOFO_AUTH_PASSWORD
+            - JICOFO_ENABLE_BRIDGE_HEALTH_CHECKS
+            - JICOFO_CONF_INITIAL_PARTICIPANT_WAIT_TIMEOUT
+            - JICOFO_CONF_SINGLE_PARTICIPANT_TIMEOUT
+            - JICOFO_ENABLE_HEALTH_CHECKS
+            - JICOFO_SHORT_ID
+            - JICOFO_RESERVATION_ENABLED 
+            - JICOFO_RESERVATION_REST_BASE_URL 
+            - JIBRI_BREWERY_MUC
+            - JIBRI_REQUEST_RETRIES
+            - JIBRI_PENDING_TIMEOUT
+            - JIGASI_BREWERY_MUC
+            - JIGASI_SIP_URI
+            - JVB_BREWERY_MUC
+            - MAX_BRIDGE_PARTICIPANTS
+            - OCTO_BRIDGE_SELECTION_STRATEGY
+            - TZ
             - XMPP_DOMAIN
             - XMPP_AUTH_DOMAIN
             - XMPP_INTERNAL_MUC_DOMAIN
             - XMPP_MUC_DOMAIN
             - XMPP_SERVER
-            - JICOFO_COMPONENT_SECRET
-            - JICOFO_AUTH_USER
-            - JICOFO_AUTH_PASSWORD
-            - JICOFO_RESERVATION_REST_BASE_URL
-            - JVB_BREWERY_MUC
-            - JIGASI_BREWERY_MUC
-            - JIGASI_SIP_URI
-            - JIBRI_BREWERY_MUC
-            - JIBRI_PENDING_TIMEOUT
-            - TZ
         depends_on:
             - prosody
         networks:
@@ -196,7 +219,7 @@ services:
 
     # Video bridge
     jvb:
-        image: jitsi/jvb:stable-5142-3
+        image: jitsi/jvb:latest
         restart: ${RESTART_POLICY}
         ports:
             - '${JVB_PORT}:${JVB_PORT}/udp'
@@ -204,6 +227,7 @@ services:
         volumes:
             - ${CONFIG}/jvb:/config:Z
         environment:
+            - ENABLE_COLIBRI_WEBSOCKET
             - DOCKER_HOST_ADDRESS
             - XMPP_AUTH_DOMAIN
             - XMPP_INTERNAL_MUC_DOMAIN

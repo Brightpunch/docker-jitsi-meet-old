@@ -1,13 +1,7 @@
 #!/usr/bin/with-contenv bash
 
-if [[ -z $JICOFO_COMPONENT_SECRET || -z $JICOFO_AUTH_PASSWORD ]]; then
-    echo 'FATAL ERROR: Jicofo component secret and auth password must be set'
-    exit 1
-fi
-
-OLD_JICOFO_COMPONENT_SECRET=s3cr37
-if [[ "$JICOFO_COMPONENT_SECRET" == "$OLD_JICOFO_COMPONENT_SECRET" ]]; then
-    echo 'FATAL ERROR: Jicofo component secret must be changed, check the README'
+if [[ -z $JICOFO_AUTH_PASSWORD ]]; then
+    echo 'FATAL ERROR: Jicofo auth password must be set'
     exit 1
 fi
 
@@ -17,10 +11,7 @@ if [[ "$JICOFO_AUTH_PASSWORD" == "$OLD_JICOFO_AUTH_PASSWORD" ]]; then
     exit 1
 fi
 
-tpl /defaults/sip-communicator.properties > /config/sip-communicator.properties
-if [[ -f /config/custom-sip-communicator.properties ]]; then
-    cat /config/custom-sip-communicator.properties >> /config/sip-communicator.properties
-fi
+tpl /defaults/jicofo.conf > /config/jicofo.conf
 
 if [[ ! -f /config/logging.properties ]]; then
     cp /defaults/logging.properties /config
