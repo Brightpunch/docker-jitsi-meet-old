@@ -104,5 +104,5 @@ if [[ -f /annolens/custom-config.js ]]; then
 fi
 
 if [[ -f /annolens/custom-interface_config.js ]]; then
-    cat /annolens/custom-interface_config.js /config/interface_config.js
+    cat /annolens/custom-interface_config.js >> /config/interface_config.js
 fi
