@@ -3,7 +3,7 @@ JITSI_RELEASE ?= stable
 JITSI_BUILD ?= latest
 JITSI_REPO ?= jitsi
 NEW_JITSI_REPO ?= brightpunch
-JITSI_SERVICES ?= base base-java web prosody jicofo jvb jigasi jibri coturn
+JITSI_SERVICES ?= base base-java web prosody jicofo jvb jigasi jibri jibri-pulse coturn
 
 BUILD_ARGS := --build-arg JITSI_REPO=$(JITSI_REPO) --build-arg JITSI_RELEASE=$(JITSI_RELEASE)
 ifeq ($(FORCE_REBUILD), 1)
